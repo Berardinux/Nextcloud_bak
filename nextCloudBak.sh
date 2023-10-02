@@ -1,11 +1,23 @@
 #!/bin/bash
 
-sudo -u www-data php occ maintenance:mode --on
+Date=$(date +"%Y%m%d")
+BackupDir="YOUR_BACKUP_DIR/$Date"
+NextcloudDir="YOUR_NEXTCLOUD"
 
-sudo rsync -Aavx nextcloud/ /LOCATION/nextcloud-backup_`date +"%Y%m%d"`/
+# Create the backup directory
+mkdir -p "$BackupDir"
 
-tar cfz /LOCATION/nextcloud-backup_DATE.tgz /LOCATION/nextcloud-backup_DATE/
+# Enable maintenance mode
+sudo -u www-data php "$NextcloudDir/occ" maintenance:mode --on
 
-sudo mysqldump --single-transaction -h SERVER -u USER -p nextcloud > nextclouddb-backup_`date +%Y%m%d"`.bak
+# Backup Nextcloud files using rsync
+sudo rsync -Aavx "$NextcloudDir/" "$BackupDir/nextcloud-backup_$Date/"
 
-sudo -u www-data php occ maintenance:mode --off
+# Create a compressed tarball of the Nextcloud backup
+tar cfz "$BackupDir/nextcloud-backup_$Date.tgz" -C "$BackupDir" "nextcloud-backup_$Date/"
+
+# Backup the Nextcloud database
+sudo mysqldump --single-transaction -h SERVER -u USER -pPASSWORD nextcloud > "$BackupDir/nextclouddb-backup_$Date.bak"
+
+# Disable maintenance mode
+sudo -u www-data php "$NextcloudDir/occ" maintenance:mode --off
