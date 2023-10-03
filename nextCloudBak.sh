@@ -43,7 +43,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 Date=$(date +"%Y%m%d")
-BackupDir="/PATH/TO/YOUR/BACKUP/DIRECTORY/$Date"
+BackupDir="/PATH/TO/YOUR/BACKUP/DIRECTORY/$Date.bak"
 NextcloudDir="/PATH/TO/YOUR/NEXTCLOUD"
 User="YOUR_DB_USER"
 Passwd="YOUR_DB_PASSWORD"
