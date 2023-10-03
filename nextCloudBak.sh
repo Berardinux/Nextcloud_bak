@@ -1,13 +1,15 @@
 #!/bin/bash
-
-:"
-Ensure that you've replaced {
+:' 
+Ensure that you have replaced {
 /PATH/TO/YOUR/BACKUP/DIRECTORY,
 /PATH/TO/YOUR/NEXTCLOUD, 
 YOUR_DB_USER, 
 YOUR_DB_PASSWORD }
 with your actual directory and database information.
+'
+# Print ascii art
 
+cat << "EOF"
         .:okOXNWWMMWWNXOko:.        
       ONMMMMMMMMMMMMMMMMMMMMWO      
       0MMMMMMMMMMMMMMMMMMMMMM0      
@@ -34,7 +36,7 @@ cWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWo
           cMMMMMMMMMMMMMMl          
              .MMMMMMMM,             
                  ..         
-"
+EOF
 
 # Check if the script is running as root
 if [ "$EUID" -ne 0 ]; then
@@ -42,14 +44,15 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-Date=$(date +"%Y%m%d")
-BackupDir="/PATH/TO/YOUR/BACKUP/DIRECTORY/$Date.bak"
-NextcloudDir="/PATH/TO/YOUR/NEXTCLOUD"
-User="YOUR_DB_USER"
-Passwd="YOUR_DB_PASSWORD"
-Database="localhost"
-Log="$BackupDir/ncScript.log"
-max_backups=10
+Date=$(date +"%Y%m%d")                             # < Variable that shows the date
+BackupDir="/PATH/TO/YOUR/BACKUP/DIRECTORY/$Date"   #< Where the new Nextcloud backup is stored. 
+NextcloudBak="/PATH/TO/ALL/YOUR/NEXTCLOUD/BACKUPS" #< Where the Nextcloud backup directorys are.
+MaxBak="2"                                         #< Change this to change the total amount of backups you will store before deletion.
+NextcloudDir="/PATH/TO/YOUR/NEXTCLOUD"             #< Where running Nextcloud is. 
+User="YOUR_DB_USER"                                #< DB User
+Passwd="YOUR_DB_PASSWORD"                          #< DB Passwd
+Database="localhost"                               #< DB Location
+Log="$BackupDir/ncScript.log"                      #< Backup Logs
 
 # Create the backup directory
 if [ -d "$BackupDir" ] || [ -d "$Log" ]; then
@@ -83,11 +86,11 @@ fi
 sudo -u www-data php "$NextcloudDir/occ" maintenance:mode --off
 
 # Count the number of existing backup directories
-backup_count=$(find "$BackupDir" -maxdepth 1 -type d -name "20*" | wc -l)
+BakCount=$(find "$NextcloudBak" -maxdepth 1 -type d -name "20*" | wc -l)
 
 # If there are more than the maximum allowed backups, remove the oldest ones
-if [ "$backup_count" -gt "$max_backups" ]; then
+if [ "$BakCount" -gt "0" ]; then
     # Use find to list backup directories, sort them by modification time, and delete the oldest ones
-    find "$BackupDir" -maxdepth 1 -type d -name "20*" -printf "%T@ %p\n" | sort -n | head -n "$((backup_count - max_backups))" | cut -d ' ' -f 2- | xargs rm -rf
+    find $NextcloudBak -maxdepth 1 -type d -name "20*" -printf "%T@ %p\n" | sort -n | head -n "$((BakCount - MaxBak))" | cut -d ' ' -f 2- >
     echo "Removed the oldest backup directories to maintain a maximum of $max_backups backups." >> "$Log"
 fi
