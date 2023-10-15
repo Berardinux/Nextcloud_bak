@@ -1,41 +1,38 @@
 #!/bin/bash
-:' 
-Ensure that you have replaced {
-/PATH/TO/YOUR/BACKUP/DIRECTORY,
-/PATH/TO/YOUR/NEXTCLOUD, 
-YOUR_DB_USER, 
-YOUR_DB_PASSWORD }
-with your actual directory and database information.
-'
-# Print ascii art
 
+# Ensure that you have replaced {
+# /PATH/TO/YOUR/BACKUP/DIRECTORY,
+# /PATH/TO/YOUR/PLEX,
+# }
+
+# Print ASCII art
 cat << "EOF"
-        .:okOXNWWMMWWNXOko:.        
-      ONMMMMMMMMMMMMMMMMMMMMWO      
-      0MMMMMMMMMMMMMMMMMMMMMM0      
-      ;MMMMMMMMMMMMMMMMMMMMMM;      
-       MMMMMMMMMMMMMMMMMMMMMM       
-       NMMMMMMMMMMMMMMMMMMMMM       
-       lMMMMMMMMMMMMMMMMMMMMx       
-       .MMMMMMMMMMMMMMMMMMMM.       
-        MMMMMMMMMMMMMMMMMMMM        
-        xMMMMMMMMMMMMMMMMMMO        
-        'MMMMMMMMMMMMMMMMMM;        
-  .;ldO0NMMMMMMMMMMMMMMMMMMN0Odl;.  
+        .:okOXNWWMMWWNXOko:.
+      ONMMMMMMMMMMMMMMMMMMMMWO
+      0MMMMMMMMMMMMMMMMMMMMMM0
+      ;MMMMMMMMMMMMMMMMMMMMMM;
+       MMMMMMMMMMMMMMMMMMMMMM
+       NMMMMMMMMMMMMMMMMMMMMM
+       lMMMMMMMMMMMMMMMMMMMMx
+       .MMMMMMMMMMMMMMMMMMMM.
+        MMMMMMMMMMMMMMMMMMMM
+        xMMMMMMMMMMMMMMMMMMO
+        'MMMMMMMMMMMMMMMMMM;
+  .;ldO0NMMMMMMMMMMMMMMMMMMN0Odl;.
 cWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWo
-    dMMMMMMMMMMMMMMMMMMMMMMMMMMx    
+    dMMMMMMMMMMMMMMMMMMMMMMMMMMx
 
-       d                    o       
-       ;                    ,       
-       0                    k       
-      lM                    Xl      
-     .MM                    XM.     
-     ;MM,                  ,MM:     
-      ;MMKo,            ,o0MM:      
-        xMMMMKd;.  .;dKMMMMO        
-          cMMMMMMMMMMMMMMl          
-             .MMMMMMMM,             
-                 ..         
+       d                    o
+       ;                    ,
+       0                    k
+      lM                    Xl
+     .MM                    XM.
+     ;MM,                  ,MM:
+      ;MMKo,            ,o0MM:
+        xMMMMKd;.  .;dKMMMMO
+          cMMMMMMMMMMMMMMl
+             .MMMMMMMM,
+                 ..
 EOF
 
 # Check if the script is running as root
