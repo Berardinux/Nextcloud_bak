@@ -24,7 +24,7 @@ cat << "EOF"
   .;ldO0NMMMMMMMMMMMMMMMMMMN0Odl;.  
 cWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWo
     dMMMMMMMMMMMMMMMMMMMMMMMMMMx    
-                                    
+
        d                    o       
        ;                    ,       
        0                    k       
@@ -43,6 +43,7 @@ if [ "$EUID" -ne 0 ]; then
     echo "Please run this script as root or with sudo."
     exit 1
 fi
+
 
 Date=$(date +"%Y%m%d")                             # < Variable that shows the date
 BackupDir="/PATH/TO/YOUR/BACKUP/DIRECTORY/$Date"   #< Where the new Nextcloud backup is stored. 
@@ -89,8 +90,8 @@ sudo -u www-data php "$NextcloudDir/occ" maintenance:mode --off
 BakCount=$(find "$NextcloudBak" -maxdepth 1 -type d -name "20*" | wc -l)
 
 # If there are more than the maximum allowed backups, remove the oldest ones
-if [ "$BakCount" -gt "0" ]; then
+if [ "$BakCount" -gt "$MaxBak" ]; then
     # Use find to list backup directories, sort them by modification time, and delete the oldest ones
-    find $NextcloudBak -maxdepth 1 -type d -name "20*" -printf "%T@ %p\n" | sort -n | head -n "$((BakCount - MaxBak))" | cut -d ' ' -f 2- >
+    find $NextcloudBak -maxdepth 1 -type d -name "20*" -printf "%T@ %p\n" | sort -n | head -n "$((BakCount - MaxBak))" | cut -d ' ' -f 2- | xargs rm -rf
     echo "Removed the oldest backup directories to maintain a maximum of $max_backups backups." >> "$Log"
 fi
